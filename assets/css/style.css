@@ -1,0 +1,165 @@
+a,p,label{
+    font-size: 18px;
+}
+input{
+    font-size: 16px;
+    padding: 5px;
+    margin: 3px auto;
+}
+input[type=submit]{
+    font-size: 16px;
+    width: 100px;
+    float: right;
+    margin-top: 5px;
+}
+
+
+
+/*** Globals ***/
+.error{
+    font-size: 14px;
+    text-align: center;
+    color: #ff0000;
+    font-weight:bold;
+    margin: 0;
+}
+
+.space-label{
+    /*Thinking in these labels that are so short but i want it to be in the same space*/
+    margin-right: 40px;
+}
+
+/*** Square form ***/
+.login,.signup{
+    padding: 10px;
+    border: 1px solid #000000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/*** Login ***/
+.login{
+    width: 60%;
+    margin: 250px 20%;
+}
+
+@media screen and (min-width: 662px){
+    .login{
+        padding: 10px;
+        width: 30%;
+        margin: 250px 35%;
+    }
+}
+
+.login form{
+    margin: 0 5px 50px;
+}
+
+.login #login,.login label{
+    margin-top: 10px;
+}
+
+/*** Registry ***/
+.signup{
+    width: 60%;
+    margin: 225px 20%;
+}
+
+@media screen and (min-width: 662px){
+    .signup{
+        width: 34%;
+        margin: 225px 33%;
+    }
+}
+
+.signup form{
+    margin: 0 5px 50px;
+}
+
+/*** Home pagwe ***/
+.bar{
+    text-align: right; 
+}
+.bar{
+    width: 100%;
+    background-color: #080808;
+    color: white;
+    padding: 25px 15px 15px;
+}
+.dropdown{
+    position: relative;
+    display: inline-block;
+}
+.bar p{
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.bar i{
+    font-size: 26px;
+}
+
+.dropdown-content{
+    right: 0;
+    display: none;
+    position: absolute;
+    min-width: 250px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown:hover .dropdown-content{
+    display: block;
+}
+
+.sidebar{
+    padding: 0;
+    text-align: center;
+    background-color: #080808;
+}
+.sidebar a{
+    display: block;
+    padding: 15px 10px;
+    color: #ffffff;
+    font-size: 20px;
+    transition: all .3s ease-in-out;
+}
+
+.sidebar a:hover{
+    background-color: #424242;
+    font-size: 24px;
+}
+
+/*** Team page ***/
+.team h2{
+    margin: 30px auto;
+}
+
+.workers_header{
+    text-align: center;
+    font-size: 20px;
+}
+.worker_content{
+    font-size: 16px;
+}
+.workers_header, .workers_content{
+    padding: 8px;
+    border: 0.5px solid #080808;
+}
+
+.brd-up{
+    border-top: 1px solid #080808;
+}
+
+.brd-lft{
+    border-top: 1px solid #080808;
+}
+
+.brd-rgt{
+    border-top: 1px solid #080808;
+}
+
+.brd-btm{
+    border-top: 1px solid #080808;
+}

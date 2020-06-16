@@ -9,3 +9,5 @@ $conn = mysqli_connect(SERVER, USER, PASSWORD,DB);
 
 if(!$conn)
     die("Connection failed ". mysqli_connect_error());
+
+require_once 'functions.php';

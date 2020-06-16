@@ -18,5 +18,5 @@ define('JS'           , ASSETS.'js/');
 define('IMG'          , ASSETS.'img/');
 define('PLUGINS'      , ASSETS.'plugins/');
 
+
 require_once APP.'dbConnect.php';
-require_once APP.'functions.php';
