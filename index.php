@@ -1,32 +1,39 @@
-<?php require_once 'app/config.php';?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<?php require_once 'app/config.php';
+      require_once 'includes/head.php';
+?>
+<?php
+    if(isset($_GET['logout'])){
+        if ($_GET['logout'] == "true"){
+            session_unset();
+            session_destroy();
+        }
 
-    <link rel="stylesheet" href="<?php echo CSS; ?>style.css">    
-    <title>Register</title>
-</head>
-<body>
+    }
+?>
 
-    <form action="<?php echo URL;?>/app/functions.php" method="post">
-    <label for="username">Username </label>
-    <input type="text" name="username" id="username" required><br>
-    <label for="password">Password </label>
-    <input type="password" name="password" id="password" required><p id="error" style="margin-left:10px; font-size:14px; font-weight:bold; display:none;">Holi</p><br>
+<div class="login square-form">
+    <div>
+        <p class="error">
+            <?php 
+                if(isset($_GET['error'])){
+                    if ($_GET['error'] == "wrong_data")
+                        echo "User or password are incorrect.";
+                    else if ($_GET['error'] == "no_user")
+                        echo "User doesn't exist.";
+                }
+            ?>
+        </p>
+        <form action="<?php echo URL;?>/app/functions.php" method="post">
+            <label for="username">Username: </label>
+            <input type="text" name="username"> <br>
+            <label for="password">Password: </label>
+            <input type="password" name="password"> <br>
+            <input class="btn btn-primary" type="submit" value="login" name="login" id="login">
+        </form>
+        <p style="text-align: center;">No account ? <a href="register.php" style="color: blue; text-decoration: none;" id="register_link">Sign up </a> now</p>
+    </div>
+</div>
 
-    <label for="team">Team </label>
-    <input type="text" name="team" id="team" required><br>
-    <label for="name">Name </label>
-    <input type="text" name="name" id="name" required><br>
-    <label for="last_name">Last name </label>
-    <input type="text" name="last_name" id="last_name" required><br>
-    <label for="telephone">Telephone </label>
-    <input type="text" name="telephone" id="telephone"><br>
-    
-    <input type="submit" value="Register" name="register" id="register">
-    </form>
 
     <script src="<?PHP echo JS;?>main.js"></script>
 </body>

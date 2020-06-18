@@ -1,7 +1,7 @@
 a,p,label{
     font-size: 18px;
 }
-input{
+input,select,textarea{
     font-size: 16px;
     padding: 5px;
     margin: 3px auto;
@@ -23,14 +23,74 @@ input[type=submit]{
     font-weight:bold;
     margin: 0;
 }
+.red-x{
+    float: right;
+    color: #ff0000;
+    font-weight: bold;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all .3s ease-in-out;
+}
 
-.space-label{
-    /*Thinking in these labels that are so short but i want it to be in the same space*/
+.red-x:hover{
+    font-size: 22px;
+    color: #be2323;
+}
+
+.blink{
+    animation: blinker 1.5s linear infinite;
+}
+@keyframes blinker {
+    30% {
+      opacity: 0;
+    }
+}
+
+.warning{
+    color: #ff0000;
+    font-weight: bold;
+}
+/*Thinking in these labels that are so short but i want it to be in the same space*/
+.space-label-10{
+    margin-right: 10px;
+}
+.space-label-40{
     margin-right: 40px;
 }
 
+/*** Modalform ***/
+.modalform{
+    display: none;
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 50px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+}
+
+.close {
+    position: absolute;
+    top: 75px;
+    right: 35px;
+    color: #ffffff;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: rgb(255, 255, 255);
+    text-decoration: none;
+    cursor: pointer;
+  }
+
 /*** Square form ***/
-.login,.signup{
+.square-form{
     padding: 10px;
     border: 1px solid #000000;
     display: flex;
@@ -60,7 +120,7 @@ input[type=submit]{
     margin-top: 10px;
 }
 
-/*** Registry ***/
+/*** Register ***/
 .signup{
     width: 60%;
     margin: 225px 20%;
@@ -75,6 +135,14 @@ input[type=submit]{
 
 .signup form{
     margin: 0 5px 50px;
+}
+.signup span{
+    font-size:14px; font-weight:bold; color: red;
+}
+.signup i{
+    font-size: 30px;
+    color: #0000ff;
+    margin-top: 15px;
 }
 
 /*** Home pagwe ***/
@@ -132,10 +200,11 @@ input[type=submit]{
 }
 
 /*** Team page ***/
-.team h2{
+.content{
     margin: 30px auto;
 }
 
+/** Workers view **/
 .workers_header{
     text-align: center;
     font-size: 20px;
@@ -148,18 +217,80 @@ input[type=submit]{
     border: 0.5px solid #080808;
 }
 
-.brd-up{
-    border-top: 1px solid #080808;
+/** Projects view **/
+.project{
+    border: 1px solid #000;
+    padding: 10px 15px;
+    margin: 5px;
+    height: 150px;
+}
+@media screen and (min-width: 662px){
+    .project{
+        height: 150px;
+    }
+}
+.info-project{
+    margin-top: 15px;
+    float: right;
+}
+.project a, .project p{
+    display: inline;
+}
+.project a{
+    padding: 6px 18px;
+    transition: all 0.4s ease-in-out;
+}
+.project a:hover{
+    font-size: 22px;
 }
 
-.brd-lft{
-    border-top: 1px solid #080808;
+
+.new-project{
+    width: 60%;
+    margin: 250px 20%;
+    background-color: #ffffff;
 }
 
-.brd-rgt{
-    border-top: 1px solid #080808;
+@media screen and (min-width: 768px){
+    .new-project{
+        padding: 10px;
+        width: 26%;
+        margin: 250px 37%;
+    }
 }
 
-.brd-btm{
-    border-top: 1px solid #080808;
+#add_project{
+    width: 150px;
+}
+
+
+/*** Information of project ***/
+
+
+.flex-container{
+    display: block
+}
+
+@media screen and (min-width: 662px){
+    .flex-container{
+        display: flex;
+        align-items: baseline;
+    }
+    .flex-container h2{
+        flex-basis: calc(70% - 10px);
+    }
+    
+    .flex-container h4{
+        flex-basis: calc(30% - 10px);
+    }
+}
+
+.description{
+    margin: 15px 0 55px;
+    border: 1px solid #000000;
+    padding: 10px;
+}
+
+.tasks{
+    margin-top: 20px;
 }
