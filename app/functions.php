@@ -116,7 +116,7 @@ if (isset($_POST['login'])){
 
 }
 
-//Add and Delete new project
+//Add, edit and Delete projects
 if (isset($_GET['project'])){
     if ($_GET['project'] == "add"){
         $name = $_GET['name'];
@@ -144,6 +144,37 @@ if (isset($_GET['project'])){
             $last_id = mysqli_insert_id($conn);
             echo $last_id;
         }
+    }
+}
+
+//Add, edit and delete tasks
+if (isset($_GET['task'])){
+    if ($_GET['task'] == "add"){
+        $task             = $_GET['name'];
+        $id_person_assign = $_GET['personAssign'];
+        $date             = $_GET['date'];
+        $urgent           = $_GET['urgent'];
+        $id_project       = $_GET['id_project'];
+        $team = $_SESSION['team'];
+
+        $query = "insert into task (description, date, id_person_assign, urgency, id_team, id_project) values('$task', '$date', '$id_person_assign', '$urgent', '$team', '$id_project')";
+        $result = mysqli_query($conn, $query);
+        if (!$result){
+            echo "Error: " . $query . "<br>" . mysqli_error($conn);
+        }
+        else{
+            $last_id = mysqli_insert_id($conn);
+            echo $last_id;
+        }
+    }
+    else if ($_GET['task'] == "delete"){
+        $id_task    = $_GET['id_task'];
+        $id_project = $_GET['i'];
+        $query  = "delete from task where id_task = $id_task";
+        $result = mysqli_query($conn, $query);
+        if ($result){
+            header("Location: ../home.php?page=more&info=".$id_project);
+        } 
     }
 }
 
