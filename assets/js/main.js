@@ -277,7 +277,7 @@ document.addEventListener("DOMContentLoaded", function(){
                 if (this.readyState == 4 && this.status == 200){ //Create column for new project before to send info to database.
                     var project = document.getElementById(id);
                     if (project != null)
-                        project.remove();
+                        project.parentElement.parentElement.parentElement.remove();
                     else
                         window.location.href = "home.php?page=projects";
                 }
@@ -485,20 +485,13 @@ document.addEventListener("DOMContentLoaded", function(){
             xmlhttp.onreadystatechange = function(){
                 if (this.readyState == 4 && this.status == 200){ //Create column for new project before to send info to database.
                     var task        = document.getElementById(id_task);
-                        date_task   = task.querySelector("span");
                         urgent_task = task.querySelectorAll("p");
 
-                    date_task.setAttribute("class", "complete");
                     urgent_task[3].setAttribute("class", "col-sm-2 complete");
-                    
                 }
             };
             xmlhttp.open("GET", "app/functions.php?task=complete&id_task="+id_task, true); //Send data
             xmlhttp.send();
-
-            addModalView();
-            cleanModal();
-            modal.style.display = "none";
         }
          
     }

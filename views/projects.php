@@ -7,14 +7,19 @@
         $result_projects = mysqli_query($conn, $query_projects);
         if (mysqli_num_rows($result_projects) > 0){
             while($rows_projects = mysqli_fetch_assoc($result_projects)){
-                $id = $rows_projects['id_project'];
-                $name = $rows_projects['name_project'];
-                $date = strtotime($rows_projects['date_project']);
+                $id       = $rows_projects['id_project'];
+                $name     = $rows_projects['name_project'];
+                $date     = strtotime($rows_projects['date_project']);
+                $complete = $rows_projects['complete'];
         ?>
             <div class="col-sm-4">
                 <div class="project">
                 <span id="delete-project" data-id="<?php echo $id; ?>" class="red-x" data-toggle="tooltip" title="Delete project">X</span>
-                    <h3><?php echo $name;?></h3>
+                    <h3><?php echo $name;
+                               if ($complete == 1)
+                               echo "<span class=\"btn btn-success btn-circle\"><i class=\"fas fa-check\"></i><span>";
+                        ?>
+                    </h3>
                     <div class="info-project">
                         <p><?php echo date("m-d-Y", $date );?></p> <a class="btn btn-primary more-project" data-toggle="tooltip" title="See more" id="<?php echo $id;?>"><i class="fas fa-angle-double-right"></i></a>
                     </div>

@@ -9,17 +9,23 @@
             $date        = new Datetime($rows['date_project']);
             $date        = $date->format("m/d/Y");
             $description = $rows['description_project'];
+            $complete    = $rows['complete'];
         }
     }
 ?>
 
 <div class="content container">
     <div class="flex-container">
-        <h2 data-id="<?php echo $_GET["info"];?>" class="project-name"><?php echo $name;?></h2>
-        <h4 class="project-date">Finish date: <?php if ($today->format("m/d/Y") < $date)
-                                    echo "<span > $date </span>";
-                                else
-                                    echo "<span class=\"blink warning\"> $date </span>";?>
+        <h2 data-id="<?php echo $_GET["info"];?>" class="project-name"><?php echo $name;
+                                                                             if ($complete == 1)
+                                                                                echo "<span class=\"btn btn-success btn-circle\"><i class=\"fas fa-check\"></i><span>";
+                                                                        ?></h2>
+        <h4 class="project-date">Finish date: <?php if ($complete == 1)
+                                                        echo "<span class=\"complete\"> $date </span>";
+                                                    else if($today->format("m/d/Y") < $date)
+                                                        echo "<span > $date </span>";
+                                                    else
+                                                        echo "<span class=\"blink warning\"> $date </span>";?>
         </h4>
         <span class="btn btn-warning" data-toogle="tooltip" title="Edit" id="showModalform"><i id="add-project" class="fas fa-pen"></i></span>
         <span class="btn btn-success" data-toogle="tooltip" title="Complete" id="completeProject" data-id="<?php echo $_GET["info"];?>"><i class="fas fa-check"></i></span>

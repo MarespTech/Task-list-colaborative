@@ -154,14 +154,17 @@ if (isset($_GET['project'])){
     }
     else if ($_GET['project'] == "delete"){
         $id = $_GET['id'];
-        $query = "delete from project where id_project = $id";
-        $result = mysqli_query($conn, $query);
-        if (!$result){
-            echo "Error: " . $query . "<br>" . mysqli_error($conn);
-        }
+        $query_task  = "Delete from task where id_project = $id";
+        $result_task = mysqli_query($conn, $query_task);
+        if (!$result_task)
+            echo "Error: " . $query_task . "<br>" . mysqli_error($conn);
         else{
-            $last_id = mysqli_insert_id($conn);
-            echo $last_id;
+            $query_project = "Delete from project where id_project = $id";
+            $result_project = mysqli_query($conn, $query_project);
+            if (!$result_project)
+                echo "Error: " . $query_project . "<br>" . mysqli_error($conn);
+            else
+                echo "Project delete";
         }
     }
     else if ($_GET['project'] == "complete"){

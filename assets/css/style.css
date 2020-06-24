@@ -64,6 +64,15 @@ span{
     color: #0f940f;
     font-weight: bold;
 }
+
+.btn-circle{
+    border-radius: 50%;
+    cursor: auto;
+    padding: 1.5px 3px;
+}
+.btn-circle i{
+    padding-left: 2px;
+}
 /*** Square form ***/
 .square-form{
     padding: 10px;
