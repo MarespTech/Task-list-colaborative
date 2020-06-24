@@ -86,7 +86,6 @@ if(isset($_POST['register'])){
     }
 }
 
-
 //Log in
 if (isset($_POST['login'])){
     //Get username and password
@@ -133,6 +132,26 @@ if (isset($_GET['project'])){
             echo $last_id;
         }
     }
+    else if ($_GET['project'] == "edit"){
+        $id     = $_GET['id'];
+        $query  = "update project set  ";
+        if (isset($_GET['name']))
+            $query .= " name_project = '". $_GET['name'] . "',";
+        if (isset($_GET['date']))
+            $query .= " date_project = '". $_GET['date'] . "',";
+        if (isset($_GET['description']))
+            $query .= " description_project = '". $_GET['description'] . "',";
+
+        $query = substr_replace($query, "", -1);
+        $query .= " where id_project = $id";
+        $result = mysqli_query($conn, $query);
+        if (!$result){
+            echo "Error: " . $query . "<br>" . mysqli_error($conn);
+        }
+        else{
+            echo "Project updated";
+        }
+    }
     else if ($_GET['project'] == "delete"){
         $id = $_GET['id'];
         $query = "delete from project where id_project = $id";
@@ -144,6 +163,14 @@ if (isset($_GET['project'])){
             $last_id = mysqli_insert_id($conn);
             echo $last_id;
         }
+    }
+    else if ($_GET['project'] == "complete"){
+        $id_project    = $_GET['id_project'];
+        $query  = "update project set complete = 1 where id_project = $id_project";
+        $result = mysqli_query($conn, $query);
+        if ($result){
+            echo "done";
+        } 
     }
 }
 
@@ -167,15 +194,47 @@ if (isset($_GET['task'])){
             echo $last_id;
         }
     }
+    else if ($_GET['task'] == "edit"){
+        $id_task          = $_GET['id_task'];
+
+        $query  = "update task set  ";
+        if (isset($_GET['taskname']))
+            $query .= " description = '". $_GET['taskname'] . "',";
+        if (isset($_GET['personAssign']))
+            $query .= " id_person_assign = '". $_GET['personAssign'] . "',";
+        if (isset($_GET['date']))
+            $query .= " date = '". $_GET['date'] . "',";
+        if (isset($_GET['urgent']))
+            $query .= " urgency = '". $_GET['urgent'] . "',";
+
+        $query = substr_replace($query, "", -1);
+        $query .= " where id_task = $id_task";
+        $result = mysqli_query($conn, $query);
+        if (!$result){
+            echo "Error: " . $query . "<br>" . mysqli_error($conn);
+        }
+        else{
+            echo "Task updated";
+        }
+    }
     else if ($_GET['task'] == "delete"){
         $id_task    = $_GET['id_task'];
-        $id_project = $_GET['i'];
         $query  = "delete from task where id_task = $id_task";
         $result = mysqli_query($conn, $query);
         if ($result){
-            header("Location: ../home.php?page=more&info=".$id_project);
+            echo "done";
         } 
     }
+    else if ($_GET['task'] == "complete"){
+        $id_task    = $_GET['id_task'];
+        $query  = "update task set complete = 1 where id_task = $id_task";
+        $result = mysqli_query($conn, $query);
+        if ($result){
+            echo "done";
+        } 
+    }
+        
 }
+
 
 ?>

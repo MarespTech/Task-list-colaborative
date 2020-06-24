@@ -7,7 +7,7 @@
         while($rows = mysqli_fetch_assoc($result)){
             $name        = $rows['name_project'];
             $date        = new Datetime($rows['date_project']);
-            $date        = $date->format("m-d-Y");
+            $date        = $date->format("m/d/Y");
             $description = $rows['description_project'];
         }
     }
@@ -15,31 +15,32 @@
 
 <div class="content container">
     <div class="flex-container">
-        <h2 id="<?php echo $_GET["info"];?>" class="project-name"><?php echo $name;?></h2>
-        <h4 >Finish date: <?php if ($today->format("m-d-Y") < $date)
-                                    echo $date;
+        <h2 data-id="<?php echo $_GET["info"];?>" class="project-name"><?php echo $name;?></h2>
+        <h4 class="project-date">Finish date: <?php if ($today->format("m/d/Y") < $date)
+                                    echo "<span > $date </span>";
                                 else
-                                    echo "<span class=\"blink warning\"> $date";?>
+                                    echo "<span class=\"blink warning\"> $date </span>";?>
         </h4>
-        <span class="btn btn-warning" data-toogle="tooltip" title="Edit" id="editProject"><i class="fas fa-pen"></i></span>
+        <span class="btn btn-warning" data-toogle="tooltip" title="Edit" id="showModalform"><i id="add-project" class="fas fa-pen"></i></span>
+        <span class="btn btn-success" data-toogle="tooltip" title="Complete" id="completeProject" data-id="<?php echo $_GET["info"];?>"><i class="fas fa-check"></i></span>
     </div>
     <div class="row description">
         <div class="col-sm-12">
-            <p><?php echo $description;?></p>
+            <p class="project-descript"><?php echo $description;?></p>
         </div>
     </div>
 
     <div class="row">
-       <h3 class="col-sm-1" style="margin: 0 0 20px 0;">Tasks</h3>
-       <div class="col-sm-6">
-           <span id="showModalform" data-toggle="tooltip" title="Add task" class="add-task"><i class="fas fa-plus btn btn-danger" ></i> </span>
+       <h3 class="col-sm-1" style="margin: 0 0 7px 0;">Tasks</h3>
+       <div class="col-sm-2">
+           <span id="showModalform" data-toggle="tooltip" title="Add task" class="btn btn-danger" style="margin: 0 0 10px 0;"><i id="add-task" class="fas fa-plus"></i> </span>
        </div> 
        
     </div>
     
     <div class="row" id="tasks">
     <?php  
-    $query = "select task.id_task, task.description, task.date, task.urgency, user.name, user.last_name from task inner join user on user.id_user = task.id_person_assign where task.id_project = $id order by task.date ASC";
+    $query = "select task.id_task, task.description, task.date, task.urgency, task.complete, user.name, user.last_name from task inner join user on user.id_user = task.id_person_assign where task.id_project = $id order by task.date ASC";
     $result = mysqli_query($conn, $query);
     if ($result){
         if (mysqli_num_rows($result) > 0){
@@ -48,25 +49,33 @@
                 $description = $rows['description'];
                 $full_name   = $rows['name']." ".$rows['last_name'];
                 $date        = new Datetime($rows['date']);
-                $dateStr     = $date->format("m-d-Y");
+                $dateStr     = $date->format("m/d/Y");
     ?>
             <div class="row" id="<?php echo $id_task;?>">
                 <p class="col-sm-3"><?php echo $description?></p>
                 <p class="col-sm-3">Assign to: <?php echo $full_name;?></p>
-                <p class="col-sm-3" id="<?php echo $date->format("Y-m-d"); ?>">Finish date: <?php if ($today < $date)
+                <p class="col-sm-2" id="<?php echo $date->format("Y/m/d"); ?>">Finish date: <?php if ($today < $date)
                                                                 echo $dateStr;
-                                                            else
-                                                                echo "<span class=\"blink warning\"> $dateStr";?>
+                                                            else{
+                                                                if ($rows['complete'] == 1)
+                                                                    echo "<span class=\"complete\"> $dateStr";
+                                                                else
+                                                                    echo "<span class=\"blink warning\"> $dateStr";
+                                                            }?>
                 </p>
-                <?php if ($rows['urgency'] == 1){
+                <?php if ($rows['complete'] == 1){
+                    echo "<p class=\"complete col-sm-2\">This task is complete.</p>"; 
+                } 
+                else if ($rows['urgency'] == 1){
                     echo "<p class=\"blink warning col-sm-2\">This task is urgent !</p>";   
                 }
                 else{
                     echo "<p class=\"col-sm-2\">This task is not urgent.</p>";
                 }
                 ?>
-                <div class="col-sm-1" style="margin-bottom: 15px">
+                <div class="col-sm-2" style="margin-bottom: 15px">
                     <span class="btn btn-warning" data-toogle="tooltip" title="Edit" id="edit"><i class="fas fa-pen"></i></span>
+                    <span class="btn btn-success" data-toogle="tooltip" title="Complete" id="complete"><i class="fas fa-check"></i></span>
                 </div>
             </div>
             <?php
@@ -82,10 +91,24 @@
     </div>
 </div>
 
-<div class="modalform" id="add-task">
+<div class="modalform" id="project">
     <div class="new-project square-form">
     <span class="close">&times;</span>
-        <div>
+        <div id="projectM">
+            <input type="text" name="project" id="name-project" placeholder="Project name"><br>
+            <input type="date" name="date" id="date-project" placeholder="Date" ><br>
+            <textarea name="description" id="description-project" cols="37" rows="5" placeholder="Project Description"></textarea>
+   
+            <a id="delete-project" data-id="<?php echo $_GET['info']?>" data-toggle="tooltip" title="Delete Project" class="btn btn-danger" ><i class="fas fa-trash-alt"></i></a>
+            <input class="btn btn-primary" data-id="<?php echo $_GET['info']?>" type="submit" value="Edit project" name="edit_project" id="edit_project">
+        </div>
+    </div>
+</div>
+
+<div class="modalform" id="task">
+    <div class="new-task square-form">
+    <span class="close">&times;</span>
+        <div id="task">
             <input type="text" name="task" id="new-task" placeholder="Task" style="width: 300px"><br>
             <input type="date" name="date" id="date-task" placeholder="Date" style="width: 300px"><br>
             <label for="person">Person Assign: </label>
@@ -111,6 +134,3 @@
     </div>
 </div>
 
-<div class="info">
-
-</div>
