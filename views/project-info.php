@@ -46,7 +46,7 @@
     
     <div class="row" id="tasks">
     <?php  
-    $query = "select task.id_task, task.description, task.date, task.urgency, task.complete, user.name, user.last_name from task inner join user on user.id_user = task.id_person_assign where task.id_project = $id order by task.date ASC";
+    $query = "select task.id_task, task.description, task.date, task.urgency, task.complete, user.name, user.last_name from task inner join user on user.id_user = task.id_person_assign where task.id_project = $id and disable_flag != 1 order by task.date ASC";
     $result = mysqli_query($conn, $query);
     if ($result){
         if (mysqli_num_rows($result) > 0){

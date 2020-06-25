@@ -176,12 +176,12 @@ if (isset($_GET['project'])){
     }
     else if ($_GET['project'] == "delete"){
         $id = $_GET['id'];
-        $query_task  = "Delete from task where id_project = $id";
+        $query_task  = "update task set disable_flag = 1 where id_project = $id";
         $result_task = mysqli_query($conn, $query_task);
         if (!$result_task)
             echo "Error: " . $query_task . "<br>" . mysqli_error($conn);
         else{
-            $query_project = "Delete from project where id_project = $id";
+            $query_project = "update project set disable_flag = 1 where id_project = $id";
             $result_project = mysqli_query($conn, $query_project);
             if (!$result_project)
                 echo "Error: " . $query_project . "<br>" . mysqli_error($conn);
@@ -225,25 +225,25 @@ if (isset($_GET['task'])){
 
         $query  = "update task set  ";
         if (isset($_GET['taskname'])){
-            $query .= " description = ? where id_project = $id_task";
+            $query .= " description = ? where id_task = $id_task";
             $stmt = $conn->prepare($query);
             $stmt->bind_param("s", $_GET['taskname']);
             $stmt->execute();
         }
         if (isset($_GET['personAssign'])){
-            $query .= " id_person_assign = ? where id_project = $id_task";
+            $query .= " id_person_assign = ? where id_task = $id_task";
             $stmt = $conn->prepare($query);
             $stmt->bind_param("i", $_GET['personAssign']);
             $stmt->execute();
         }
         if (isset($_GET['date'])){
-            $query .= " date = ? where id_project = $id_task";
+            $query .= " date = ? where id_task = $id_task";
             $stmt = $conn->prepare($query);
             $stmt->bind_param("s", $_GET['date']);
             $stmt->execute();
         }
         if (isset($_GET['urgent'])){
-            $query .= " urgency = ? where id_project = $id_task";
+            $query .= " urgency = ? where id_task = $id_task";
             $stmt = $conn->prepare($query);
             $stmt->bind_param("i", $_GET['urgent']);
             $stmt->execute();
@@ -251,7 +251,7 @@ if (isset($_GET['task'])){
     }
     else if ($_GET['task'] == "delete"){
         $id_task    = $_GET['id_task'];
-        $query  = "delete from task where id_task = $id_task";
+        $query  = "update task set disable_flag = 1 where id_task = $id_task";
         $result = mysqli_query($conn, $query);
         if ($result){
             echo "done";

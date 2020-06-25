@@ -3,7 +3,7 @@
     
     <div class="row" id="projects">
         <?php
-        $query_projects = "select * from project where id_team=".$team;
+        $query_projects = "select * from project where id_team=$team and disable_flag != 1";
         $result_projects = mysqli_query($conn, $query_projects);
         if (mysqli_num_rows($result_projects) > 0){
             while($rows_projects = mysqli_fetch_assoc($result_projects)){

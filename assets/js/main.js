@@ -422,13 +422,11 @@ document.addEventListener("DOMContentLoaded", function(){
                    url += "&date="+date;
                if (urgent_val != "")
                     url += "&urgent="+urgent_val;
-               
         var xmlhttp = new XMLHttpRequest();
         xmlhttp.onreadystatechange = function(){
             if (this.readyState == 4 && this.status == 200){ //Create column for new project before to send info to database. 
                 var taskRow = document.getElementById(id_task),
                     data = taskRow.querySelectorAll("p");
-                
                     //Edit information
                 if (task != "")
                     data[0].textContent = task;
@@ -446,15 +444,10 @@ document.addEventListener("DOMContentLoaded", function(){
                         data[3].textContent = "This task is not urgent";
                     }
                }
-               console.log(this.responseText);
-               
                 addModalView();
                 cleanModal();
                 modal[1].style.display = "none";
             }
-            
-            
-            
         };
         xmlhttp.open("GET", url , true); //Send data
         xmlhttp.send();
@@ -496,7 +489,7 @@ document.addEventListener("DOMContentLoaded", function(){
          
     }
     function editViewModal(){
-        modal[0].style.display = "block";
+        modal[1].style.display = "block";
             id_task    = this.parentElement.parentElement.id;
         var id_project = document.querySelector(".flex-container h2").getAttribute("id");
             

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 24, 2020 at 02:13 AM
+-- Generation Time: Jun 25, 2020 at 11:19 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.3
 
@@ -34,16 +34,9 @@ CREATE TABLE `project` (
   `description_project` varchar(255) COLLATE utf8mb4_spanish_ci NOT NULL,
   `date_project` date NOT NULL,
   `id_team` int(11) NOT NULL,
-  `complete` tinyint(1) NOT NULL
+  `complete` tinyint(1) NOT NULL,
+  `disable_flag` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
-
---
--- Dumping data for table `project`
---
-
-INSERT INTO `project` (`id_project`, `name_project`, `description_project`, `date_project`, `id_team`, `complete`) VALUES
-(1, 'To Do List Colaborative', 'Crear un to do list colaborativo utilizando tecnologias como php, javascript', '2020-06-19', 1, 0),
-(14, 'Landing page', 'Landing page with my portfolio', '2020-07-10', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -59,19 +52,9 @@ CREATE TABLE `task` (
   `complete` tinyint(1) NOT NULL,
   `urgency` tinyint(1) NOT NULL,
   `id_team` int(11) NOT NULL,
-  `id_project` int(11) NOT NULL
+  `id_project` int(11) NOT NULL,
+  `disable_flag` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
-
---
--- Dumping data for table `task`
---
-
-INSERT INTO `task` (`id_task`, `description`, `date`, `id_person_assign`, `complete`, `urgency`, `id_team`, `id_project`) VALUES
-(7, 'Nouveau Task', '2020-07-01', 13, 0, 0, 1, 1),
-(9, 'Add photos into the projects page', '2020-06-26', 9, 1, 0, 1, 14),
-(13, 'Initial Task', '2020-06-23', 9, 1, 0, 1, 1),
-(15, 'Nouveau Task deux', '2020-06-30', 9, 0, 0, 1, 1),
-(19, 'Upload project to a host', '2020-06-29', 9, 0, 0, 1, 14);
 
 -- --------------------------------------------------------
 
@@ -90,9 +73,7 @@ CREATE TABLE `team` (
 --
 
 INSERT INTO `team` (`id_team`, `name_team`, `code_team`) VALUES
-(1, 'Mejora Continua', '7x9NG'),
-(2, 'IT', 'VkzxF'),
-(5, 'Software', 'FLmzE');
+(14, 'CI Software', 'baUKF');
 
 -- --------------------------------------------------------
 
@@ -115,11 +96,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id_user`, `username`, `password`, `name`, `last_name`, `email`, `id_team`) VALUES
-(9, 'RSmith', '$2y$10$Di6SsJ0qngy787jbGrlcQOjrjZXOc9EHYrB5ikds2sPvQZrj09qLa', 'Ryan', 'Smith', 'rsmith@example.com', 1),
-(12, 'jhonnyme', '$2y$10$M12e/7wEZnmnW4RY/.KEi.ELXc8LhIqmtM4mHvU3VW4qvuumBP2wC', 'Jhonnyme', 'lolavo', 'j@mail.com', 1),
-(13, 'jgomez', '$2y$10$4JJ8eH7WuK6TROMixH6rWu4Uqa78ebeEtGypE.eUklML7.M7KLhxW', 'Jose', 'Gomez', 'jgomez@example.com', 1),
-(26, 'JMay', '$2y$10$xTjZuu2tc9LuowC9P2p0veRMYo4sNVJhbSP/iOeZDbYB7PhnaYppS', 'Jane', 'May', 'JM@example.com', 2),
-(27, 'pepito123', '$2y$10$PFpfU62Idz01Lw3x.Vt65uhdj/8l0snmOi/MPpmYLcPCiN/ioSVFa', 'Pepito', 'Valles', '', 5);
+(44, 'mespericueta', '$2y$10$0lpkAzM9pSRdjzVnD8haSexhu0imI3Hnb8bG60uthdVyBeVc2ur.S', 'Martin Mateo', 'Espericueta Gomez', 'mespericueta@martechmedical.com', 14);
 
 --
 -- Indexes for dumped tables
@@ -163,25 +140,25 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `project`
 --
 ALTER TABLE `project`
-  MODIFY `id_project` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id_project` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `task`
 --
 ALTER TABLE `task`
-  MODIFY `id_task` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id_task` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `team`
 --
 ALTER TABLE `team`
-  MODIFY `id_team` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_team` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- Constraints for dumped tables

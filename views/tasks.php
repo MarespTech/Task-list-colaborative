@@ -7,7 +7,7 @@
     <div class="row tasks">
     <?php 
     $today  = new Datetime(); 
-    $query  = "select task.id_project, task.description, task.date, task.urgency, project.name_project from task inner join project on project.id_project = task.id_project where task.id_person_assign = $id_user and task.complete = 0 order by task.date ASC";
+    $query  = "select task.id_project, task.description, task.date, task.urgency, project.name_project from task inner join project on project.id_project = task.id_project where task.id_person_assign = $id_user and task.complete = 0 and disable_flag != 1 order by task.date ASC";
     $result = mysqli_query($conn, $query);
     if ($result){
         if(mysqli_num_rows($result) > 0){
