@@ -34,7 +34,21 @@
     </div>
 </div>
 
-
+<?php
+    if(isset($_GET['signup'])){
+        if ($_GET['signup'] == "success"){
+?>
+            <div class="modalform" id="messageModal" style="display: block;">
+                <div class="message-modal square-form">
+                    <span class="close">&times;</span>
+                    <h2>Sign up Success !</h2>
+                    <p>Your account is already activate.</p>
+                </div>
+            </div>
+<?php
+        }
+    }
+?>
     <script src="<?PHP echo JS;?>main.js"></script>
 </body>
 </html>

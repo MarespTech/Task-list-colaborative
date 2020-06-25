@@ -20,7 +20,7 @@
             <span> * </span><label for="password">Password: </label>
             <input type="password" name="password" id="password" placeholder="Password" required><p class="error"style="margin-left:10px; font-size:14px; display:none;"></p><br>
 
-            <label for="team_code" class="space-label-10">Enter with: </label>
+            <span> * </span><label for="team_code" class="space-label-10">Enter with: </label>
             <select name="team_code" id="team_code">
                 <option value="newTeam">New team</option>
                 <option value="code">Team code</option>
@@ -47,7 +47,7 @@
             <span> * </span><label for="last_name">Last name: </label>
             <input type="text" name="last_name" id="last_name" placeholder="Last name" required><br>
             
-            <label for="email" class="space-label-40">E-mail: </label>
+            <span> * </span><label for="email" class="space-label-40">E-mail: </label>
             <input type="email" name="email" id="email" placeholder="E-mail"><br>
             
             <div class="row">

@@ -19,9 +19,6 @@ function generateCode() {
     $result = mysqli_query($conn, $query);
     if (mysqli_num_rows($result) > 0)
         $code = "";
-    else
-        echo $code;
-
     }while($code == "");
     return $code;
 }
@@ -29,18 +26,23 @@ function generateCode() {
 //Register new user
 if(isset($_POST['register'])){
     //Get values with POST Method
-    $username = $_POST['username'];
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-    $name = $_POST['name'];
-    $last_name = $_POST['last_name'];
-    if(isset($_POST['email']))
-        $email = $_POST['email'];
+    $username  = strip_tags($_POST['username']);
+    $password  = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    $name      = strip_tags($_POST['name']);
+    $last_name =  strip_tags($_POST['last_name']);
+    $id_team   = 0;
+    if(isset($_POST['email'])){
+        $email =  strip_tags($_POST['email']);
+    }  
     else
         $email = "No E-mail";
 
     //Validate if the username isn't already exist
-    $query = "select * from user where username = '$username'";
-    $result = mysqli_query($conn, $query);
+    $query = "select * from user where username = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
     if (mysqli_num_rows($result) > 0){
         header("Location: http://localhost/Tasklist/register.php?error=user_exist"); //Return error: user already exist
     }
@@ -48,52 +50,69 @@ if(isset($_POST['register'])){
     //Check if the user is singing up with code or new team
     if(isset($_POST['team'])){
         //If the user signs up with new team, check if the new team is already exist
-        $team = $_POST['team'];
-        $query = "select * from team where name_team = '$team'";
-        $result = mysqli_query($conn, $query);
+        $team = strip_tags($_POST['team']);
+        $query = "select * from team where name_team = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("s", $team);
+        $stmt->execute();
+        $result = $stmt->get_result();
         if (mysqli_num_rows($result) > 0){
             header("Location: http://localhost/Tasklist/register.php?error=team_exist"); //Return error: user already exist
         }
         else{
             $code = generateCode();
-            echo "El codigo es $code";
-            $query = "Insert into team(name_team, code_team) values('$team', '$code')";
-            $result = mysqli_query($conn, $query);
-            if (!$result) {
+            $query = "Insert into team(name_team, code_team) values(?, ?)";
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param("ss", $team, $code );
+            if (!$stmt->execute()) {
                 echo "Error: " . $query . "<br>" . mysqli_error($conn);
             }
+            else
+                $id_team = $conn->insert_id;
+            
         }
     }
     else{ //If the user sings up with code, Check if the code is correct
-        $code = $_POST['code'];
-        $query = "select * from team where code_team = '$code'";
-        $result = mysqli_query($conn, $query);
+        $code = strip_tags($_POST['code']);
+        $query = "select * from team where code_team = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("s", $code);
+        $stmt->execute();
+        $result = $stmt->get_result();
         if (mysqli_num_rows($result) == 0){
             header("Location: http://localhost/Tasklist/register.php?error=no_code"); //Return error: Code is not correct
         }
         else{
             while($rows = mysqli_fetch_assoc($result))
-                $team = $rows['name_team'];
+                $id_team = $rows['id_team'];
         }
     }
     //Insert new user into user table
-    $query = "INSERT INTO `user` (`username`, `password`, `name`, `last_name`,`email`, `id_team`) select '$username', '$password', '$name', '$last_name', '$email' ,id_team from team where name_team like '%$team%'";
-    $result = mysqli_query($conn, $query);
-    if (!$result)  
-        header("Location: http://localhost/Tasklist/register.php?success=false");
-    else
+    $query = "INSERT INTO `user` (`username`, `password`, `name`, `last_name`,`email`, `id_team`) VALUES(?, ?, ?, ?, ? ,?)";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("ssssss", $username, $password, $name, $last_name, $email, $id_team);
+    if (!$stmt->execute()){  
+        echo "Error: " . $query . "<br>" . mysqli_error($conn);
+        //header("Location: http://localhost/Tasklist/register.php?success=false");
+    }
+    else{
+        $stmt->close();
         header("Location: http://localhost/Tasklist/index.php?signup=success");
     }
+        
+    }
 }
-
 //Log in
 if (isset($_POST['login'])){
     //Get username and password
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    $query = "Select * from user where username = '$username'";
-    $result = mysqli_query($conn, $query);
+    $query = "Select * from user where username = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
     if (mysqli_num_rows($result) > 0){
         while($row = mysqli_fetch_assoc($result)){
@@ -114,7 +133,6 @@ if (isset($_POST['login'])){
         header("Location: http://localhost/Tasklist/index.php?error=no_user");
 
 }
-
 //Add, edit and Delete projects
 if (isset($_GET['project'])){
     if ($_GET['project'] == "add"){
@@ -122,9 +140,10 @@ if (isset($_GET['project'])){
         $description = $_GET['description'];
         $date = $_GET['date'];
         $team = $_SESSION['team'];
-        $query = "insert into project (name_project, description_project,date_project,id_team) values('$name', '$description', '$date', $team)";
-        $result = mysqli_query($conn, $query);
-        if (!$result){
+        $query = "insert into project (name_project, description_project,date_project,id_team) values(?, ?, ?, ?)";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("sssi",$name,$description,$date,$team);
+        if (!$stmt->execute()){
             echo "Error: " . $query . "<br>" . mysqli_error($conn);
         }
         else{
@@ -135,22 +154,25 @@ if (isset($_GET['project'])){
     else if ($_GET['project'] == "edit"){
         $id     = $_GET['id'];
         $query  = "update project set  ";
-        if (isset($_GET['name']))
-            $query .= " name_project = '". $_GET['name'] . "',";
-        if (isset($_GET['date']))
-            $query .= " date_project = '". $_GET['date'] . "',";
-        if (isset($_GET['description']))
-            $query .= " description_project = '". $_GET['description'] . "',";
-
-        $query = substr_replace($query, "", -1);
-        $query .= " where id_project = $id";
-        $result = mysqli_query($conn, $query);
-        if (!$result){
-            echo "Error: " . $query . "<br>" . mysqli_error($conn);
+        if (isset($_GET['name'])){
+            $query .= " name_project = ? where id_project = $id";
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param("s", $_GET['name']);
+            $stmt->execute();
         }
-        else{
-            echo "Project updated";
+        if (isset($_GET['date'])){
+            $query .= " date_project = ? where id_project = $id";
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param("s", $_GET['date']);
+            $stmt->execute();
         }
+        if (isset($_GET['description'])){
+            $query .= " description_project = ? where id_project = $id";
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param("s", $_GET['description']);
+            $stmt->execute();
+        }
+        $stmt->close();
     }
     else if ($_GET['project'] == "delete"){
         $id = $_GET['id'];
@@ -185,11 +207,12 @@ if (isset($_GET['task'])){
         $date             = $_GET['date'];
         $urgent           = $_GET['urgent'];
         $id_project       = $_GET['id_project'];
-        $team = $_SESSION['team'];
+        $team             = $_SESSION['team'];
 
-        $query = "insert into task (description, date, id_person_assign, urgency, id_team, id_project) values('$task', '$date', '$id_person_assign', '$urgent', '$team', '$id_project')";
-        $result = mysqli_query($conn, $query);
-        if (!$result){
+        $query = "insert into task (description, date, id_person_assign, urgency, id_team, id_project) values(?, ?, ?, ?, ?, ?)";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("ssiiii", $task, $date, $id_person_assign, $urgent, $team, $id_project);
+        if (!$stmt->execute()){
             echo "Error: " . $query . "<br>" . mysqli_error($conn);
         }
         else{
@@ -201,23 +224,29 @@ if (isset($_GET['task'])){
         $id_task          = $_GET['id_task'];
 
         $query  = "update task set  ";
-        if (isset($_GET['taskname']))
-            $query .= " description = '". $_GET['taskname'] . "',";
-        if (isset($_GET['personAssign']))
-            $query .= " id_person_assign = '". $_GET['personAssign'] . "',";
-        if (isset($_GET['date']))
-            $query .= " date = '". $_GET['date'] . "',";
-        if (isset($_GET['urgent']))
-            $query .= " urgency = '". $_GET['urgent'] . "',";
-
-        $query = substr_replace($query, "", -1);
-        $query .= " where id_task = $id_task";
-        $result = mysqli_query($conn, $query);
-        if (!$result){
-            echo "Error: " . $query . "<br>" . mysqli_error($conn);
+        if (isset($_GET['taskname'])){
+            $query .= " description = ? where id_project = $id_task";
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param("s", $_GET['taskname']);
+            $stmt->execute();
         }
-        else{
-            echo "Task updated";
+        if (isset($_GET['personAssign'])){
+            $query .= " id_person_assign = ? where id_project = $id_task";
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param("i", $_GET['personAssign']);
+            $stmt->execute();
+        }
+        if (isset($_GET['date'])){
+            $query .= " date = ? where id_project = $id_task";
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param("s", $_GET['date']);
+            $stmt->execute();
+        }
+        if (isset($_GET['urgent'])){
+            $query .= " urgency = ? where id_project = $id_task";
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param("i", $_GET['urgent']);
+            $stmt->execute();
         }
     }
     else if ($_GET['task'] == "delete"){
